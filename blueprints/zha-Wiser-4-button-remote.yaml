@@ -1,0 +1,120 @@
+# forked from https://gist.github.com/probize/5a9cfb3fadac5e7955942b0bfe841238
+blueprint:
+  name: ZHA Schneider Wiser 4-Button
+  description: Automate Schneider Wiser 4-Button remote by ZHA events.
+  domain: automation
+  input:
+    schneider_wiser_sw:
+      name: Schneider Wiser 4-Button
+      description: Schneider Wiser 4-Button 555 D 6001
+      selector:
+        device:
+          integration: zha
+          manufacturer: Schneider Electric
+          model: FLS/AIRLINK/4
+
+    button_UL_short_press:
+      name: Upper Left  Button single press
+      description: Action to run on button upper-left single press
+      default: []
+      selector:
+        action: {}
+
+    button_UL_long_press:
+      name: Upper Left  Button long press
+      description: Action to run on button upper-left long press
+      default: []
+      selector:
+        action: {}
+
+    button_LL_short_press:
+      name: Lower left Button single press
+      description: Action to run on button lower-left single press
+      default: []
+      selector:
+        action: {}
+
+    button_LL_long_press:
+      name: Lower left Button long press
+      description: Action to run on button lower-left long press
+      default: []
+      selector:
+        action: {}
+
+    button_UR_short_press:
+      name: Upper Right Button single press
+      description: Action to run on button upper-right single press
+      default: []
+      selector:
+        action: {}
+    button_UR_long_press:
+      name: Upper Right Button long press
+      description: Action to run on button upper-right long press
+      default: []
+      selector:
+        action: {}
+
+    button_LR_short_press:
+      name: Lower Right Button single press
+      description: Action to run on button lower-right single press
+      default: []
+      selector:
+        action: {}
+
+    button_LR_long_press:
+      name: Lower Right Button long press
+      description: Action to run on button lower-right long press
+      default: []
+      selector:
+        action: {}
+
+    button_U_stop_long_press:
+      name: Uper Stop long press
+      description: Action to run on buttons uper stop long press
+      default: []
+      selector:
+        action: {}
+
+    button_L_stop_long_press:
+      name: Lower Stop long press
+      description: Action to run on button lower stop long press
+      default: []
+      selector:
+        action: {}
+
+#  source_url:
+mode: restart
+max_exceeded: silent
+trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: !input "schneider_wiser_sw"
+action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      endpoint_id: "{{ trigger.event.data.endpoint_id }}"
+      # move_with_on_off
+      # move
+      args: "{{ trigger.event.data.args }}"
+  - choose:
+      - conditions: "{{ command == 'on' and endpoint_id == 21 }}"
+        sequence: !input "button_UL_short_press"
+      - conditions: "{{ command == 'on' and endpoint_id == 22 }}"
+        sequence: !input "button_LL_short_press"
+      - conditions: "{{ command == 'off' and endpoint_id == 21 }}"
+        sequence: !input "button_UR_short_press"
+      - conditions: "{{ command == 'off' and endpoint_id == 22 }}"
+        sequence: !input "button_LR_short_press"
+      - conditions: "{{ command == 'move_with_on_off' and endpoint_id == 21 }}"
+        sequence: !input "button_UL_long_press"
+      - conditions: "{{ command == 'move_with_on_off' and endpoint_id == 22 }}"
+        sequence: !input "button_LL_long_press"
+      - conditions: "{{ command == 'move' and endpoint_id == 21 }}"
+        sequence: !input "button_UR_long_press"
+      - conditions: "{{ command == 'move' and endpoint_id == 22 }}"
+        sequence: !input "button_LR_long_press"
+      - conditions: "{{ command == 'stop' and endpoint_id == 21 }}"
+        sequence: !input "button_U_stop_long_press"
+      - conditions: "{{ command == 'stop' and endpoint_id == 22 }}"
+        sequence: !input "button_L_stop_long_press"
