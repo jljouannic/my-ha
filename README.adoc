@@ -1,0 +1,30 @@
+= Home Assistant Blueprints
+:experimental:
+:icons: font
+:toc:
+:toc-placement!:
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+ifndef::env-github[]
+endif::[]
+
+A collection of Home Assistant Blueprints I use.
+
+toc::[]
+
+== Wiser 4 buttons wall remote
+
+This blueprint is a fixed version of https://community.home-assistant.io/u/probize/summary[this one,window=_blank],
+by https://community.home-assistant.io/u/probize/summary[Probize,window=_blank]
+
+[link=https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2Fjljouannic%2Fmy-ha%2Fblob%2Fmain%2Fblueprints%2Fzha-Wiser-4-button-remote.yaml]
+image::https://my.home-assistant.io/badges/blueprint_import.svg[Home Assistant import button for Wiser 4 buttons wall remote blueprint]
+
+NOTE: According to this
+https://community.home-assistant.io/t/elko-smart-4-button-switch-setup/425226/2[comment,window=_blank],
+the remote 2-channel mode is activated by pressing button 1 and 4 for 10 seconds.
