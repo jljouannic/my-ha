@@ -1,10 +1,27 @@
+---
+# forked from https://github.com/niro1987/homeassistant-config/blob/main/blueprints/automation/niro1987/zha_ikea_tradfri_5button_remote_white.yaml
+
+# This automation simulates the use of the IKEA TRADFRI Remote control
+# connected through ZHA.
+
+# | Button   | Action               |
+# | -------- | -------------------- |
+# | Power    | Toggle the light     |
+# | Dim-Up   | Increase brightness  |
+# | Dim-Down | Decrease brightness  |
+# | Right    | Increase temperature |
+# | Left     | Decrease temperature |
 blueprint:
-  source_url: https://raw.githubusercontent.com/niro1987/homeassistant-config/main/blueprints/automation/niro1987/zha_ikea_tradfri_5button_remote_white.yaml
+  source_url: https://github.com/jljouannic/my-ha/blob/main/blueprints/zha_ikea_tradfri_5button_remote_white.yml
+
   name: ZHA - IKEA TRADFRI - 5 Button Remote - Warm White Lights
-  description:
+
+  description: >-
     This automation simulates the use of the IKEA TRADFRI remote control
     connected through ZHA.
+
   domain: automation
+
   input:
     remote:
       name: IKEA TRADFRI remote control
@@ -36,28 +53,35 @@ blueprint:
           unit_of_measurement: milliseconds
           mode: slider
       default: 500
+
 mode: restart
 max_exceeded: silent
+
 variables:
   var_light: !input light
   var_speed: !input speed
+
 trigger:
   - platform: event
     event_type: zha_event
     event_data:
       device_id: !input remote
+
 action:
+  - variables:
+      command: "{{ trigger.event.data.command }}"
+      args: "{{ trigger.event.data.args }}"
+
   - choose:
-      - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "toggle" }}'
+      # Short-Press on the power button.
+      - conditions: "{{ command == 'toggle' }}"
         sequence:
           - service: light.toggle
             target:
               entity_id: !input light
-      - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "move_to_level_with_on_off" }}'
+
+      # Long-Press on the power button.
+      - conditions: "{{ command == 'move_to_level_with_on_off' }}"
         sequence:
           - service: light.turn_on
             target:
@@ -65,9 +89,9 @@ action:
             data:
               brightness: 254
               color_temp: 400
-      - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "step_with_on_off" }}'
+
+      # Short-Press on the dim-up button.
+      - conditions: "{{ command == 'step_with_on_off' }}"
         sequence:
           - service: light.turn_on
             target:
@@ -75,9 +99,9 @@ action:
             data:
               brightness_step_pct: 20
               transition: "{{ (var_speed / 1000) | float }}"
-      - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "move_with_on_off" }}'
+
+      # Long-Press on the dim-up button.
+      - conditions: "{{ command == 'move_with_on_off' }}"
         sequence:
           - repeat:
               while: []
@@ -90,9 +114,9 @@ action:
                     transition: "{{ (var_speed / 1000) | float }}"
                 - delay:
                     milliseconds: !input speed
-      - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "step" }}'
+
+      # Short-Press on the dim-down button.
+      - conditions: "{{ command == 'step' }}"
         sequence:
           - service: light.turn_on
             target:
@@ -100,9 +124,9 @@ action:
             data:
               brightness_step_pct: -20
               transition: "{{ (var_speed / 1000) | float }}"
-      - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "move" }}'
+
+      # Long-Press on the dim-down button.
+      - conditions: "{{ command == 'move' }}"
         sequence:
           - repeat:
               while: []
@@ -115,11 +139,11 @@ action:
                     transition: "{{ (var_speed / 1000) | float }}"
                 - delay:
                     milliseconds: !input speed
+
+      # Short-Press on the color-up button.
       - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "press" }}'
-          - condition: template
-            value_template: "{{ trigger.event.data.args == [256,13,0] }}"
+          - "{{ command == 'press' }}"
+          - "{{ args == [256, 13, 0] }}"
         sequence:
           - service: light.turn_on
             target:
@@ -132,11 +156,11 @@ action:
                 {{ state_attr(var_light, "color_temp") - 18 }}
                 {% endif %}
               transition: "{{ (var_speed / 1000) | float }}"
+
+      # Long-Press on the color-up button.
       - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "hold" }}'
-          - condition: template
-            value_template: "{{ trigger.event.data.args == [3328,0] }}"
+          - "{{ command == 'hold' }}"
+          - "{{ args == [3328, 0] }}"
         sequence:
           - repeat:
               while: []
@@ -154,11 +178,11 @@ action:
                     transition: "{{ (var_speed / 1000) | float }}"
                 - delay:
                     milliseconds: !input speed
+
+      # Short-Press on the color-down button.
       - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "press" }}'
-          - condition: template
-            value_template: "{{ trigger.event.data.args == [257,13,0] }}"
+          - "{{ command == 'press' }}"
+          - "{{ args == [257, 13, 0] }}"
         sequence:
           - service: light.turn_on
             target:
@@ -171,11 +195,11 @@ action:
                 {{ state_attr(var_light, "color_temp") + 18 }}
                 {% endif %}"
               transition: "{{ (var_speed / 1000) | float }}"
+
+      # Long-Press on the color-down button.
       - conditions:
-          - condition: template
-            value_template: '{{ trigger.event.data.command == "hold" }}'
-          - condition: template
-            value_template: "{{ trigger.event.data.args == [3329,0] }}"
+          - "{{ command == 'hold' }}"
+          - "{{ args == [3329, 0] }}"
         sequence:
           - repeat:
               while: []
@@ -193,4 +217,6 @@ action:
                     transition: "{{ (var_speed / 1000) | float }}"
                 - delay:
                     milliseconds: !input speed
+
+    # Any other event will cancel the repeat loops.
     default: []
