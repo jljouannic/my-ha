@@ -9,9 +9,10 @@ blueprint:
       description: Schneider Wiser 4-Button 555 D 6001
       selector:
         device:
-          integration: zha
-          manufacturer: Schneider Electric
-          model: FLS/AIRLINK/4
+          filter:
+            integration: zha
+            manufacturer: Schneider Electric
+            model: FLS/AIRLINK/4
           multiple: false
     button_UL_short_press:
       name: Upper Left  Button single press

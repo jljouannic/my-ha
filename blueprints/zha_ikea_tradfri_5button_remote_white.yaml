@@ -29,9 +29,9 @@ blueprint:
       selector:
         device:
           filter:
-            - integration: zha
-              manufacturer: IKEA of Sweden
-              model: TRADFRI remote control
+            integration: zha
+            manufacturer: IKEA of Sweden
+            model: TRADFRI remote control
           multiple: false
     light:
       name: Light
@@ -39,8 +39,8 @@ blueprint:
       selector:
         entity:
           filter:
-            - domain:
-                - light
+            domain:
+              - light
           multiple: false
     speed:
       name: Speed
@@ -76,14 +76,14 @@ action:
       # Short-Press on the power button.
       - conditions: "{{ command == 'toggle' }}"
         sequence:
-          - service: light.toggle
+          - action: light.toggle
             target:
               entity_id: !input light
 
       # Long-Press on the power button.
       - conditions: "{{ command == 'move_to_level_with_on_off' }}"
         sequence:
-          - service: light.turn_on
+          - action: light.turn_on
             target:
               entity_id: !input light
             data:
@@ -93,7 +93,7 @@ action:
       # Short-Press on the dim-up button.
       - conditions: "{{ command == 'step_with_on_off' }}"
         sequence:
-          - service: light.turn_on
+          - action: light.turn_on
             target:
               entity_id: !input light
             data:
@@ -106,7 +106,7 @@ action:
           - repeat:
               while: []
               sequence:
-                - service: light.turn_on
+                - action: light.turn_on
                   target:
                     entity_id: !input light
                   data:
@@ -118,7 +118,7 @@ action:
       # Short-Press on the dim-down button.
       - conditions: "{{ command == 'step' }}"
         sequence:
-          - service: light.turn_on
+          - action: light.turn_on
             target:
               entity_id: !input light
             data:
@@ -131,7 +131,7 @@ action:
           - repeat:
               while: []
               sequence:
-                - service: light.turn_on
+                - action: light.turn_on
                   target:
                     entity_id: !input light
                   data:
@@ -145,7 +145,7 @@ action:
           - "{{ command == 'press' }}"
           - "{{ args == [256, 13, 0] }}"
         sequence:
-          - service: light.turn_on
+          - action: light.turn_on
             target:
               entity_id: !input light
             data:
@@ -165,7 +165,7 @@ action:
           - repeat:
               while: []
               sequence:
-                - service: light.turn_on
+                - action: light.turn_on
                   target:
                     entity_id: !input light
                   data:
@@ -184,7 +184,7 @@ action:
           - "{{ command == 'press' }}"
           - "{{ args == [257, 13, 0] }}"
         sequence:
-          - service: light.turn_on
+          - action: light.turn_on
             target:
               entity_id: !input light
             data:
@@ -204,7 +204,7 @@ action:
           - repeat:
               while: []
               sequence:
-                - service: light.turn_on
+                - action: light.turn_on
                   target:
                     entity_id: !input light
                   data:
