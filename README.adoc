@@ -39,3 +39,10 @@ NOTE: According to
 https://community.home-assistant.io/t/elko-smart-4-button-switch-setup/425226/2[this comment,window=_blank],
 the remote 2-channel mode is activated by pressing button 1 and 4 for 10 seconds.
 
+== Scripts
+
+=== Configure Lixee reporting frequency
+
+I used this script after my Lixee ZLinky_TIC started to report less often (about only twice a month!).
+
+NOTE: link:https://github.com/mdeweerd/zha-toolkit[ZHA Toolkit,window=_blank] must be installed for this script to operate as expected.
