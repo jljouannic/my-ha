@@ -77,8 +77,8 @@ blueprint:
   source_url: https://github.com/jljouannic/my-ha/blob/main/blueprints/zha-Wiser-4-button-remote.yml
 mode: restart
 max_exceeded: silent
-trigger:
-  - platform: event
+triggers:
+  - trigger: event
     event_type: zha_event
     event_data:
       device_id: !input schneider_wiser_sw
